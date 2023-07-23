@@ -8,16 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Класс, представляющий магазин игрушек.
+ */
 public class ToyStore {
     private List<Toy> toys;
 
+    /**
+     * Конструктор класса ToyStore.
+     * Создает пустой список игрушек.
+     */
     public ToyStore() {
         this.toys = new ArrayList<>();
     }
 
-    public void addOrUpdateToy(int id, String name, int quantity, double weight) {
+    /**
+     * Добавить новую игрушку или обновить существующую.
+     *
+     * @param id       идентификатор игрушки
+     * @param name     название игрушки
+     * @param quantity количество игрушек в магазине
+     * @param weight   частота выпадения игрушки в розыгрыше (вес в % от 100)
+     */
+    public void addOrUpdateToy(int id, String name, int quantity,
+                               double weight) {
         if (quantity < 0 || weight < 0) {
-            System.out.println("Ошибка: количество и вес игрушки не может быть отрицательным.");
+            System.out.println("Ошибка: количество и вес игрушки не может " +
+                    "быть отрицательным.");
             return;
         }
 
@@ -31,9 +48,16 @@ public class ToyStore {
         }
     }
 
+    /**
+     * Розыгрыш призовых игрушек.
+     *
+     * @param numToys количество призовых игрушек для розыгрыша
+     * @return список призовых игрушек
+     */
     public List<Toy> drawToys(int numToys) {
         if (numToys <= 0) {
-            System.out.println("Ошибка: количество призовых игрушек должно быть больше 0.");
+            System.out.println("Ошибка: количество призовых игрушек должно " +
+                    "быть больше 0.");
             return null;
         }
 
@@ -65,7 +89,8 @@ public class ToyStore {
         for (Toy toy : toys) {
             currentWeight += toy.getWeight();
             if (randomNumber < currentWeight) {
-                Toy prizeToy = new Toy(toy.getId(), toy.getName(), 1, toy.getWeight());
+                Toy prizeToy = new Toy(toy.getId(), toy.getName(), 1,
+                        toy.getWeight());
                 toy.decreaseQuantity();
                 if (toy.getQuantity() == 0) {
                     toys.remove(toy);
@@ -75,7 +100,8 @@ public class ToyStore {
         }
 
         Toy lastToy = toys.get(toys.size() - 1);
-        Toy prizeToy = new Toy(lastToy.getId(), lastToy.getName(), 1, lastToy.getWeight());
+        Toy prizeToy = new Toy(lastToy.getId(), lastToy.getName(), 1,
+                lastToy.getWeight());
         lastToy.decreaseQuantity();
         if (lastToy.getQuantity() == 0) {
             toys.remove(lastToy);
@@ -93,7 +119,8 @@ public class ToyStore {
     }
 
     public void writeToTextFile(List<Toy> prizeToys) {
-        try (FileWriter writer = new FileWriter("prize_toys.txt", true)) {
+        try (FileWriter writer = new FileWriter("prize_toys.txt",
+                true)) {
             for (Toy toy : prizeToys) {
                 writer.write(toy.getId() + " " + toy.getName() + "\n");
             }
